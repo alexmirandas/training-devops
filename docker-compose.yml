@@ -1,0 +1,39 @@
+# Archivo de dockere-compose que:
+#        * Instala MySql
+#        * Copia un sitio web que opuca una BD de MySql
+#         * Instala PhpMyadmin.
+************************* docker-compose.yml ********************************
+version: "3"
+
+services:
+  mybd_mysql:
+     restart: always
+     image: mysql:5.7
+     environment:
+         - MYSQL_DATABASE=bd_compose1
+         - MYSQL_USER=user_bd
+         - MYSQL_PASSWORD=123
+         - MYSQL_ROOT_PASSWORD=1234
+     volumes:
+         - ./mysql:/var/lib/mysql
+    expose:
+        - 3306
+    ports:
+        - 3306:3306
+ myphp_service:
+    image: php:7-apache
+    volumes:
+##Copia la carpeta "proyecto-login" a la ruta indicada dentro del contenedor##
+        - ./proyecto-login/:/var/www/html
+    expose:
+       - 80
+    ports:
+       - 80:80
+    links:
+       - mybd_mysql
+  my_phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+       - 8080:80
+     links:
+       - mybd_mysql:db
