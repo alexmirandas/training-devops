@@ -1,0 +1,38 @@
+1.- Install Ansible on the control host.
+
+	sudo yum install epel-release
+		** wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+
+	sudo yum install ansible
+
+	sudo ansible --version
+
+2.- Create an `ansible` user on both the control host and workstation host being sure to set a password you can remember.
+
+	On each host, run the noted commands below. Make sure you set a password you can remember (you will need it later).
+
+	sudo useradd ansible
+
+	sudo passwd ansible
+
+3.- Configure a pre-shared key for Ansible that allows the user to log in from `control` to `workstation` without a password.
+
+	sudo -i -u ansible (provide cloud_user a sudo password)
+
+	ssh-keygen (accept default options by pressing enter )
+
+	ssh-copy-id hostnae || ip_node (provide ansible user a password)
+
+	ssh hostnae || ip_node   (Comprobate access)
+
+	logout
+
+4.- Configure the Ansible user on the workstation host so that Ansible may sudo without a password.
+
+	sudo visudo
+		Add text at the end of the file that is opened:
+		ansible ALL=(ALL)       NOPASSWD: ALL
+		Save file:
+		(:wq in vim)
+
+5.- Create a simple inventory in `/home/ansible/inventory` consisting of only the `workstation` host.
